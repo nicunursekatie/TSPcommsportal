@@ -44,7 +44,17 @@ export default function SignUpPage() {
         },
       })
       if (error) throw error
-      router.push("/auth/check-email")
+
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      if (signInError) {
+        router.push("/auth/check-email")
+      } else {
+        router.push("/")
+      }
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred")
     } finally {
